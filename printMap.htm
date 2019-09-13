@@ -1,0 +1,442 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv="X-UA-Compatible" content="IE=10">
+    <!--
+     | Version 10.2
+     | Copyright 2012 Esri
+     |
+     | Licensed under the Apache License, Version 2.0 (the "License");
+     | you may not use this file except in compliance with the License.
+     | You may obtain a copy of the License at
+     |
+     |    https://www.apache.org/licenses/LICENSE-2.0
+     |
+     | Unless required by applicable law or agreed to in writing, software
+     | distributed under the License is distributed on an "AS IS" BASIS,
+     | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     | See the License for the specific language governing permissions and
+     | limitations under the License.
+    -->
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>B.E.R.M EXPLORER PRINT</title>
+    <link rel="shortcut icon" href="images/survey_unit.png" />
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <link href="styles/printMap.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        djConfig = (function() {
+            var base = location.href.split("/");
+            base.pop();
+            base = base.join("/");
+            return {
+                async: false,
+                mblHideAddressBar: false,
+                packages: [{
+                    name: "js",
+                    location: base + "/js"
+                }]
+            };
+        })();
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+        var dojoConfig = {
+            parseOnLoad: true
+        };
+    </script>
+    <script src="https://js.arcgis.com/3.9/"></script>
+    <script type="text/javascript">
+        dojo.require("esri.map");
+        dojo.require("esri.layers.FeatureLayer");
+        dojo.require("esri.tasks.geometry");
+        dojo.require("esri.dijit.OverviewMap");
+
+        var window_opener = window.opener;
+        var map;
+
+        function Init() {
+            //alert (window.opener.beachmap);
+            //alert (window.opener.printData);
+
+            var startExtent = new esri.geometry.Extent({
+                "xmin": -9280296.3611,
+                "ymin": 3719578.5045,
+                "xmax": -8522041.0405,
+                "ymax": 4086476.2403,
+                "spatialReference": {
+                    wkid: 102100
+                }
+            });
+            map = new esri.Map("mapPrint", {
+                extent: startExtent,
+                showAttribution: false,
+                basemap: "hybrid",
+                slider: false,
+                logo: false
+            });
+
+            dojo.connect(map, "onLoad", function(map) {
+                var overviewMap = new esri.dijit.OverviewMap({
+                    map: map,
+                    color: "#FF0000"
+                }, dojo.byId("overviewDiv"));
+                overviewMap.startup();
+            });
+
+
+
+            dojo.connect(map, "onLoad", function() {
+                map.disablePan();
+                map.disableDoubleClickZoom();
+                map.disableKeyboardNavigation();
+                map.disableScrollWheelZoom();
+                map.disableMapNavigation();
+
+            });
+
+            var printDataYear = window.opener.printData;
+
+
+            if (printDataYear === "radio2014") {
+                var printLayer = new esri.layers.FeatureLayer("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/2", {
+
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    //          infoTemplate: popupTemplate2,
+                    outFields: ["*"]
+                });
+
+                map.addLayer(printLayer);
+            }
+
+            if (printDataYear === "radio2015") {
+                var printLayer = new esri.layers.FeatureLayer("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/8", {
+
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    //          infoTemplate: popupTemplate2,
+                    outFields: ["*"]
+                });
+
+                map.addLayer(printLayer);
+            }
+
+            if (printDataYear === "radio2016") {
+                var printLayer = new esri.layers.FeatureLayer("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/13", {
+
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    //          infoTemplate: popupTemplate2,
+                    outFields: ["*"]
+                });
+
+                map.addLayer(printLayer);
+            }
+
+            if (printDataYear === "radio2017") {
+                var printLayer = new esri.layers.FeatureLayer("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/17", {
+
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    //          infoTemplate: popupTemplate2,
+                    outFields: ["*"]
+                });
+
+                map.addLayer(printLayer);
+            }
+
+            if (printDataYear === "radio2018") {
+                var printLayer = new esri.layers.FeatureLayer("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/21", {
+
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    //          infoTemplate: popupTemplate2,
+                    outFields: ["*"]
+                });
+
+                map.addLayer(printLayer);
+            }
+
+            var PRINT_TRAIL;
+            var PRINT_TRAIL_SYMBOL;
+            PRINT_TRAIL = new esri.layers.GraphicsLayer({
+                opacity: 0.50
+            });
+            map.addLayer(PRINT_TRAIL);
+            PRINT_TRAIL_SYMBOL = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255, 255, 0]), 8);
+
+
+            dojo.byId("tdFeatureName").innerHTML = window.opener.printtxt;
+            var printTran = window.opener.beachmap;
+
+            if (printDataYear === "radio2014") {
+                var printTranTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/2");
+            }
+
+            if (printDataYear === "radio2015") {
+                var printTranTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/8");
+            }
+
+            if (printDataYear === "radio2016") {
+                var printTranTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/13");
+            }
+
+            if (printDataYear === "radio2017") {
+                var printTranTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/17");
+            }
+
+            if (printDataYear === "radio2018") {
+                var printTranTask = new esri.tasks.QueryTask("hhttps://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/21");
+            }
+
+
+            var printTranQuery = new esri.tasks.Query();
+            printTranQuery.returnGeometry = true;
+            printTranQuery.outFields = ["*"];
+            printTranQuery.where = "TRAN_ID = '" + printTran + "'";
+            printTranTask.execute(printTranQuery, function(featureSet) {
+                var resultItems = [];
+                var resultFeatures = featureSet.features;
+                var resultCount = featureSet.features.length;
+                var printFeature = featureSet.features[0];
+
+                PRINT_TRAIL.clear();
+                PRINT_TRAIL.add(printFeature);
+                printFeature.setSymbol(PRINT_TRAIL_SYMBOL);
+                multiextent = esri.graphicsExtent(featureSet.features);
+                map.setExtent(multiextent.expand(1.5));
+            });
+
+            var printpath = [];
+
+            if (printDataYear === "radio2014") {
+                var printCharttranQueryTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/0");
+            }
+
+            if (printDataYear === "radio2015") {
+                var printCharttranQueryTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/6");
+            }
+
+            if (printDataYear === "radio2016") {
+                var printCharttranQueryTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/11");
+            }
+
+
+            if (printDataYear === "radio2017") {
+                var printCharttranQueryTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/15");
+            }
+
+
+            if (printDataYear === "radio2018") {
+                var printCharttranQueryTask = new esri.tasks.QueryTask("https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/19");
+            }
+
+
+
+            var printCharttranQuery = new esri.tasks.Query();
+            printCharttranQuery.returnGeometry = true;
+            printCharttranQuery.outFields = ["TRAN_ID", "POINT_X", "POINT_Y", "Elevation", "DFM", "STATIC_ID"];
+            printCharttranQuery.where = "TRAN_ID = '" + printTran + "'";
+            printCharttranQueryTask.execute(printCharttranQuery, function(featureSet) {
+
+                var resultFeatures = featureSet.features;
+                var resultCount = featureSet.features.length;
+                //alert (featureSet.features.length);
+                for (var i = 0; i < resultCount; i++) {
+
+                    var featureAttributes = featureSet.features[i].attributes;
+
+                    printpointx = featureSet.features[i].attributes["POINT_X"];
+                    printpointy = featureSet.features[i].attributes["POINT_Y"];
+                    printpointelev = featureSet.features[i].attributes["Elevation"];
+                    printpointdist = featureSet.features[i].attributes["DFM"];
+                    printpointstatid = featureSet.features[i].attributes["STATIC_ID"];
+                    printpath.push([printpointx, printpointy, printpointelev, printpointdist, printpointstatid]);
+
+                }
+                var printpoints = printmakeElevationProfileFromPath(printpath);
+                printrenderElevationProfileChart(printpoints, 'printGraph');
+            });
+
+
+        }
+
+
+        function printmakeElevationProfileFromPath(printpath) {
+            var start_elevft = Math.round(printpath[0][2]);
+
+            var printpoints = [];
+            var total_m = 0;
+            for (var i = 0, l = printpath.length; i < l; i++) {
+                var lon = printpath[i][0];
+                var lat = printpath[i][1];
+                //        var elevft = Math.round( printpath[i][2] );
+                var elevft = printpath[i][2];
+                var dist = printpath[i][3];
+                var statid = printpath[i][4];
+
+                //Old Coordinate Distance Calculation
+                //        if (i) {
+                //            var plon = printpath[i-1][0];
+                //            var plat = printpath[i-1][1];
+                //var R = 6371; // km  
+                //var dLat = (lat-plat)*Math.PI/180;  
+                //var dLon = (lon-plon)*Math.PI/180;   
+                //var a = Math.sin(dLat/2) * Math.sin(dLat/2) +  
+                //        Math.cos(plat*Math.PI/180) * Math.cos(lat*Math.PI/180) *   
+                //        Math.sin(dLon/2) * Math.sin(dLon/2);   
+                //var c = 2 * Math.asin(Math.sqrt(a));   
+                //var d = R * c;
+                //var slen = d
+                //            total_m += slen;
+                //        }
+
+                //        var miles  = 3280.84 * total_m;
+
+                var miles = dist;
+
+                // tooltip content: elevation is +- X feet relative to the starting node
+                var delev = Math.abs(start_elevft - elevft);
+                delev = (elevft >= start_elevft ? '+' : '-') + delev;
+                var text = "Elevation: " + elevft + " ft";
+                // ready, stick it on
+                printpoints.push({
+                    lon: lon,
+                    lat: lat,
+                    elevft: elevft,
+                    miles: miles,
+                    text: text,
+                    statid: statid
+                });
+            }
+
+            return printpoints;
+        }
+
+        function printrenderElevationProfileChart(printpoints, containerid) {
+            var lowest = 1000000;
+            var data = [];
+            for (var i = 0, l = printpoints.length; i < l; i++) {
+                data.push({
+                    x: printpoints[i].miles,
+                    y: printpoints[i].elevft,
+                    name: printpoints[i].text,
+                    lon: printpoints[i].lon,
+                    lat: printpoints[i].lat,
+                    statid: printpoints[i].statid
+                });
+                if (printpoints[i].elevft < lowest) lowest = printpoints[i].elevft;
+            }
+
+            var printchart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    backgroundColor: '#416999',
+                    // marginBottom: 12,
+                    marginBottom: 42,
+                    renderTo: containerid
+                },
+                title: {
+                    text: 'Profile',
+                    margin: 10,
+                    style: {
+                        color: '#FFFFFF',
+                        fontSize: '12px'
+                    }
+                },
+                xAxis: {
+                    title: {
+                        text: 'Distance (ft)',
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Elevation (ft)',
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    },
+                    tickInterval: 5,
+                    min: lowest,
+                    allowDecimals: false
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                plotOptions: {
+                    area: {
+                        marker: {
+                            enabled: false,
+                            symbol: 'circle',
+                            radius: 2,
+
+                            states: {
+                                hover: {
+                                    enabled: false
+                                }
+                            }
+                        }
+                    },
+                    series: {
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+
+                            }
+                        },
+                        events: {
+
+                        },
+                    }
+                },
+                series: [{
+                    name: 'Elevation',
+                    data: data,
+                    color: '#ddcbbb',
+                    negativeFillColor: '#99d0f3'
+                }]
+
+            });
+
+
+        }
+
+
+        dojo.addOnLoad(Init);
+    </script>
+</head>
+
+<body class="mapBody">
+    <div class="divFeatureName">
+        <table align="center" class="divfullContainer">
+            <tr>
+                <td><img src=images/DHECColor.png /></td>
+                <td id="tdFeatureName" class="tdFeatureName" align="center"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mapPrint" class="mapPrint">
+
+        <div id="ovWin" class="shadow" style="border:1px solid #FFFFFF; position:absolute; right:15px; top:15px; z-Index:998; width:120px;height:120px; ">
+            <div id="overviewDiv" style="width:100%;height:100%;"></div>
+        </div>
+    </div>
+    <div id="printGraph"></div>
+</body>
+
+</html>

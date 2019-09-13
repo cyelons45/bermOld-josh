@@ -1,0 +1,412 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html> -->
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=10">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
+      on iOS devices-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>B.E.R.M. EXPLORER</title>
+    <link rel="shortcut icon" href="images/survey_unit.png" />
+    <link rel="stylesheet" href="https://js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.9/js/dojo/dojox/layout/resources/ExpandoPane.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="styles/layout.css" />
+    <style>
+        a:link {
+            color: #FFFFFF;
+            background-color: transparent;
+        }
+        
+        a:visited {
+            color: #FFFFFF;
+            background-color: transparent;
+            text-decoration: none
+        }
+        
+        #BasemapToggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 50;
+        }
+        
+        #tocDiv {
+            position: absolute;
+            background-color: #416999;
+            top: 100px;
+            right: 10px;
+            width: 100px;
+            padding: 4px;
+            overflow: hidden;
+            color: white;
+            font-size: 11px;
+            font-weight: normal;
+            text-shadow: none;
+            border: solid #FFFFFF 2px;
+            z-index: 51;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .map .logo-med {
+            background-image: url("images/DHECColor.png") !important;
+            background-repeat: no-repeat !important;
+            width: 125px;
+            height: 49px;
+        }
+        
+        .map .logo-sm {
+            background-image: url("images/DHECColor.png") !important;
+            background-repeat: no-repeat !important;
+            width: 125px;
+            height: 49px;
+        }
+        
+        .esriSimpleSliderTL {
+            top: 70px;
+            left: 20px;
+        }
+        
+        .esriSimpleSliderHomeButton {
+            background-image: url("images/home.png") !important;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-bottom: 1px solid #666666;
+        }
+    </style>
+
+
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-68012523-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="http://canvg.github.io/canvg/rgbcolor.js"></script>
+    <script type="text/javascript" src="http://canvg.github.io/canvg/StackBlur.js"></script>
+    <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script>
+        var dojoConfig = {
+            parseOnLoad: true
+        };
+    </script>
+    <script src="https://js.arcgis.com/3.9/"></script>
+    <script type="text/javascript" src="js/bermexplorer.js"></script>
+
+
+</head>
+
+<body class="claro">
+
+    <div id="divSplashScreenContainer" style="display: none;">
+        <table class="fullHeightWidth">
+            <tr align="center" valign="middle">
+                <td>
+                    <div id="divSplashScreenContent">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div id="divSplashContainer">
+                                        <div id="divSplashContent">
+                                            <center><img src="images/DHEC_BIG.png" style="width:90%;padding-top:4%;padding-left:1%;"></center>
+                                            <br>
+                                            <hr><br>The South Carolina Beach Erosion & Monitoring application is designed to provide South Carolina beachfront communities, researchers and the general public access to topographic and bathymetric data for various
+                                            beach areas in South Carolina.<br><br><b><u>DISCLAIMER</u></b><br>Information provided by this application is intended to be used for general reference. S.C. DHEC provides no warranty, expressed or implied,
+                                            as to the accuracy, reliability or completeness of furnished data.
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <div class="customButton" onclick="hideSplash();">
+                                        <div class="customButtonInner">
+                                            <table>
+                                                <tr>
+                                                    <td align="center" valign="middle">
+                                                        <center>
+                                                            OK</center>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="downloadNode" class="downloadNode hideContainerHeight">
+
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <table style="border-bottom:white solid 1px; color: #FFFFFF; background-color: #416999; font-family: verdana; font-size: 13px;">
+                        <tr align="center" valign="top">
+                            <td align="left" valign="middle">DOWNLOAD BEACH PROFILE DATA</td>
+                            <td align="right">
+                                <img src="images/close2.png" title="Close" onclick="ShowDownloadContainer();" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width:100%;">
+                        <tr>
+                            <td>Arcadian Shores</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/ARCADIAN_SHORES.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Daufuskie Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/DAUFUSKIE_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Debidue Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/DEBIDUE_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Dewees Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/DEWEES_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Edisto Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/EDISTO_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Folly Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/FOLLY_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Fripp Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/FRIPP_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Garden City</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/GARDEN_CITY.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Harbor Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/HARBOR_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Hilton Head Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/HILTON_HEAD_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Hunting Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/HUNTING_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Huntington Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/HUNTINGTON_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Isle of Palms</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/ISLE_OF_PALMS.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Kiawah Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/KIAWAH_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Litchfield Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/LITCHFIELD_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Myrtle Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/MYRTLE_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>North Myrtle Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/NORTH_MYRTLE_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Pawleys Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/PAWLEYS_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Seabrook Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/SEABROOK_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Sullivans Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/SULLIVANS_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Surfside Beach</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/SURFSIDE_BEACH.zip"><i>Download</i></a></td>
+                        </tr>
+                        <tr>
+                            <td>Waties Island</td>
+                            <td align="right"><a href="https://www.scdhec.gov/sites/default/files/GIS/BERM-EXPLORER/WATIES_ISLAND.zip"><i>Download</i></a></td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div id="legendNode" class="legendNode hideContainerHeight">
+
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <table style="border-bottom:white solid 1px; color: #FFFFFF; background-color: #416999; font-family: verdana; font-size: 13px;">
+                        <tr align="center" valign="top">
+                            <td align="left" valign="middle" width="200">LEGEND</td>
+                            <td align="right">
+                                <img src="images/close2.png" title="Close" onclick="ShowLegendContainer();" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width:100%; font-size: 13px;">
+                        <tr>
+                            <td><img src="images/overlap.png" title="Overlap" style="width:60px;" /></td>
+                            <td align="left">Corrected Overlaps</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/gap.png" title="Gap" style="width:60px;" /></td>
+                            <td align="left">Collection Gaps</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/transect.png" title="Transect" style="width:60px;" /></td>
+                            <td align="left">Transects</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/compare.png" title="Compare" style="width:60px;" /></td>
+                            <td align="left">Comparison Transect</td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div id="mainWindow" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'headline', gutters:false" style="width:100%; height:100%;">
+        <div id="divLogo" class="divLogo">
+
+            <img class="imgApp" src="images/survey_unit.png" />
+
+        </div>
+
+        <div id="header" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'top'">
+            <i>B.E.R.M. EXPLORER</i>
+
+            <div id="subheader">DHEC - OCRM Beach Erosion Research & Monitoring Profile Viewer</div>
+
+
+
+            <div id="toolbar" style="position:absolute; top:2px; right:4px;">
+                <table style="margin-top:0px; padding:0px;">
+                    <tr>
+                        <td>
+                            <select name="BeachSelection" id="BeachSelectDD" style="color: white; background-color: #416999; font-size: 12px;" onChange="zoomToBeach(beacharea)">
+<option value="" style="display:none">Choose a Beach Area</option>
+<option value="Arcadian Shores">Arcadian Shores</option>
+<option value="Daufuskie Island">Daufuskie Island</option>
+<option value="Debidue Beach">Debidue Beach</option>
+<option value="Dewees Island">Dewees Island</option>
+<option value="Edisto Beach">Edisto Beach</option>
+<option value="Folly Beach">Folly Beach</option>
+<option value="Fripp Island">Fripp Island</option>
+<option value="Garden City">Garden City</option>
+<option value="Harbor Island">Harbor Island</option>
+<option value="Hilton Head Island">Hilton Head Island</option>
+<option value="Hunting Island">Hunting Island</option>
+<option value="Huntington Beach">Huntington Beach</option>
+<option value="Isle of Palms">Isle of Palms</option>
+<option value="Kiawah Island">Kiawah Island</option>
+<option value="Litchfield Beach">Litchfield Beach</option>
+<option value="Myrtle Beach">Myrtle Beach</option>
+<option value="North Myrtle Beach">North Myrtle Beach</option>
+<option value="Pawleys Island">Pawleys Island</option>
+<option value="Seabrook Island">Seabrook Island</option>
+<option value="Sullivans Island">Sullivans Island</option>
+<option value="Surfside Beach">Surfside Beach</option>
+<option value="Waties Island">Waties Island</option>
+</select>
+                        </td>
+                        <td><img src="images/select.png" title="Select" id="imgSelect" style="display:none; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="alert('Default Tool - Active');" /></td>
+                        <td><img src="images/selectextent.png" title="Select w Extent" id="imgSelectExtent" style="display:none; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="alert('In Progress');" /></td>
+                        <td><img src="images/selectdist.png" title="Select w Distance" id="imgSelectDist" style="display:none; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="alert('In Progress');" /></td>
+                        <td><img src="images/clear.png" title="Clear" id="imgClear" style="display:none; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="alert('In Progress');" /></td>
+                        <td><img src="images/download.png" title="Download" id="imgDownload" style="display:block; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="ShowDownloadContainer();" /></td>
+                        <td><img src="images/legend.png" title="Legend" id="imgLegend" style="display:block; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="ShowLegendContainer();" /></td>
+                        <td><img src="images/print.png" title="Print" id="imgPrint" style="display:none; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" onclick="CreatePrint();" /></td>
+                        <td>
+                            <a href="help.htm" target="_blank"><img src="images/help.png" title="Help" id="imgHelp" style="display:block; padding-left:0px; padding-right:0px; width:45px; cursor:pointer;" /></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div id="mapdiv" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+            <div id="BasemapToggle"></div>
+            <div id="tocDiv">
+                <center>BERM Data Sets</center>
+                <div>
+                    <hr>
+                    <input type="radio" style="padding-top:5px;" name="Vmodes" value="View2014" checked="checked" id="radio2014" onclick="toggleData(this.id)" data-dojo-type="dijit.form.RadioButton"><label id="Lab2014" style="vertical-align:top;line-height:19px;">&nbsp;2014</label><br>
+                    <input type="radio" style="padding-top:5px;" name="Vmodes" value="View2015" id="radio2015" onclick="toggleData(this.id)" data-dojo-type="dijit.form.RadioButton"><label id="Lab2015" style="vertical-align:top;line-height:19px;">&nbsp;2015</label><br>
+                    <input type="radio" style="padding-top:5px;" name="Vmodes" value="View2016" id="radio2016" onclick="toggleData(this.id)" data-dojo-type="dijit.form.RadioButton"><label id="Lab2016" style="vertical-align:top;line-height:19px;">&nbsp;2016</label><br>
+
+                    <input type="radio" style="padding-top:5px;" name="Vmodes" value="View2017" id="radio2017" onclick="toggleData(this.id)" data-dojo-type="dijit.form.RadioButton"><label id="Lab2017" style="vertical-align:top;line-height:19px;">&nbsp;2017</label><br>
+
+                    <input type="radio" style="padding-top:5px;" name="Vmodes" value="View2018" id="radio2018" onclick="toggleData(this.id)" data-dojo-type="dijit.form.RadioButton"><label id="Lab2018" style="vertical-align:top;line-height:19px;">&nbsp;2018</label><br>
+
+                    <input type="radio" style="padding-top:5px;" name="Vmodes" value="ViewAll" id="radioAll" onclick="toggleData(this.id)" data-dojo-type="dijit.form.RadioButton"><label id="LabAll" style="vertical-align:top;line-height:19px;">&nbsp;All</label>
+                </div>
+            </div>
+        </div>
+        <div id="footer" data-dojo-type="dojox.layout.ExpandoPane" data-dojo-props="duration:300, startExpanded:false, region:'bottom', maxHeight:'220px', easeIn:'easing.linear', easeOut:'easing.linear'" style="height:220px;" ">
+    	<div id='elevationgraph'><center><table style="height:100%; border-collapse:collapse; "><tr><td><font size="5
+            ">1.</font> Zoom to your area of interest by using the Choose a Beach Area dropdown, or manually navigate using the map-based navigation tools.</td><td style="border-left:1px solid white; ">&nbsp;</td><td><font size="5 ">2.</font> Select (Click) a transect to display the corresponding beach profile or comparison chart for viewing, printing or export.</td></tr><tr><td style="width:50%; "><img src="images/instruct1.png
+            " style="width:90%;padding-top:1%;padding-left:1%; "></td><td style="border-left:1px solid white; ">&nbsp;</td><td style="width:50%; "><img src="images/instruct2.png " style="width:90%;padding-top:1%;padding-left:1%; "></td></tr></table></center></div>
+      </div>
+      
+    </div>
+  </body>
+
+</html>
